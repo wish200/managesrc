@@ -1310,6 +1310,7 @@ public class SearchDto implements Serializable {
 	public void setPhonenumber(String phonenumber) {
 		this.phonenumber = phonenumber;
 	}
+
 	
 	
 	
