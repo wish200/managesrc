@@ -152,6 +152,11 @@ public class BaseDaoImpl<T, PK extends Serializable> implements BaseDao<T, PK> {
 		condition.put(property, value);
 		return selectOne("selectOneAudio", condition);
 	}
+	public Object selectOneObject(String mapperId,String property, Object value) {
+		Map<String, Object> condition = new HashMap<String, Object>();
+		condition.put(property, value);
+		return selectOne(mapperId, condition);
+	}
 
 	@Override
 	public T selectOne(String property, Object value) {

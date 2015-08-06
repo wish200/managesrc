@@ -32,6 +32,8 @@ public class AppAudioBaseDto {
     private String audiocontent;
 
     private String backgoundpic;
+    private String programid;
+    private String programurl;
 
     public String getAudioid() {
         return audioid;
@@ -138,4 +140,21 @@ public class AppAudioBaseDto {
     public void setBackgoundpic(String backgoundpic) {
         this.backgoundpic = backgoundpic == null ? null : backgoundpic.trim();
     }
+
+	public String getProgramid() {
+		return programid;
+	}
+
+	public void setProgramid(String programid) {
+		this.programid = programid;
+	}
+
+	public String getProgramurl() {
+		return programurl;
+	}
+
+	public void setProgramurl(String programurl) {
+		this.programurl = programurl;
+	}
+    
 }

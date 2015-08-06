@@ -25,6 +25,7 @@ public class AppAudioAction extends BaseAction{
 	private String AudioID;
 	private Page page;
 	private String userid;
+	private String programid;
 	
 	
 	/**
@@ -141,6 +142,19 @@ public class AppAudioAction extends BaseAction{
 		
 	}
 	
+	public void changeprogram(){
+		if(searchDto==null){
+			searchDto=new SearchDto();
+		}
+		searchDto.setProgramid(programid);
+		appAudioBaseDto=appAudioService.getOneObject(searchDto); 
+		if(appAudioBaseDto==null){
+			appAudioBaseDto = new AppAudioBaseDto();
+		}
+		renderJson(appAudioBaseDto);
+		
+	}
+	
 	
 	
 	
@@ -205,6 +219,12 @@ public class AppAudioAction extends BaseAction{
 	}
 	public void setUserid(String userid) {
 		this.userid = userid;
+	}
+	public String getProgramid() {
+		return programid;
+	}
+	public void setProgramid(String programid) {
+		this.programid = programid;
 	}
 
 	

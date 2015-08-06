@@ -54,6 +54,10 @@ public class AppAudioServiceImpl implements AppAudioService {
 		return (AppAudioBaseDto)appAudioDao.selectOneUser("searchDto", searchDto);
 	}
 	@Override
+	public AppAudioBaseDto getOneObject(SearchDto searchDto) {
+		return (AppAudioBaseDto)appAudioDao.selectOneObject("selectOneProgram","searchDto", searchDto);
+	}
+	@Override
 	public int getAudioCount(SearchDto searchDto) {
 		Map<String, Object> condition=new HashMap<String, Object>();
 		condition.put("searchDto", searchDto);

@@ -54,6 +54,7 @@ public interface AppAudioService {
 	 */
 	AppAudioBaseDto getOneAudio(SearchDto searchDto);
 	AppAudioBaseDto getOneUser(SearchDto searchDto);
+	AppAudioBaseDto getOneObject(SearchDto searchDto);
 	/**
 	 * 获得系统信息条数 
 	* @Title: getSystrmPoseCount 

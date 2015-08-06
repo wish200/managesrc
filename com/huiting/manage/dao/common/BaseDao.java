@@ -174,6 +174,7 @@ public interface BaseDao<T, PK> {
 	public Object selectOneUser(String property, Object value);
 	public Object selectOnePicbook(String property, Object value) ;
 	public Object selectOneAudio(String property, Object value) ;
+	public Object selectOneObject(String mapperid,String property, Object value) ;
 	/**
 	 * 
 	 * @Title: selectOne
