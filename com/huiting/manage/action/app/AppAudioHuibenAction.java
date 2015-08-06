@@ -1,13 +1,12 @@
 package com.huiting.manage.action.app;
 
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
 import com.huiting.manage.action.common.BaseAction;
 import com.huiting.manage.dto.base.AppAudioHuibenBaseDto;
-import com.huiting.manage.dto.base.AppPicHuibenBaseDto;
 import com.huiting.manage.dto.common.CcUserDto;
 import com.huiting.manage.dto.common.SearchDto;
 import com.huiting.manage.services.app.AppAudioHuibenService;
@@ -66,13 +65,34 @@ public class AppAudioHuibenAction extends BaseAction{
 	 */
 	public String add(){
 		if(appAudioHuibenBaseDto!=null){
-			String AudioHuibenid=appAudioHuibenService.getMaxAudioHuibenCode();//最大Eventno
-			String newAudioHuiben=appAudioHuibenService.getNewAudioHuibenCode(AudioHuibenid);//获得新的Eventno
-			appAudioHuibenBaseDto.setHuibenid(newAudioHuiben);
+			String huibenid = "";
+			SearchDto searchDto1 = new SearchDto();
+			AppAudioHuibenBaseDto appAudioHuibenBaseTempDto =null;
+			while("".equals(huibenid)||appAudioHuibenBaseTempDto!=null){
+				huibenid = genHuibenID("AH");
+				searchDto1.setHuibenid(huibenid);
+				appAudioHuibenBaseTempDto = appAudioHuibenService.getOneAudioHuiben(searchDto1);
+			}
+			
+			
+			appAudioHuibenBaseDto.setHuibenid(huibenid);
 			appAudioHuibenService.add(appAudioHuibenBaseDto);
-			renderText(newAudioHuiben);
+			renderText(huibenid);
 		}
 		return null;
+	}
+	public String genHuibenID(String type){
+		 String[] chars = new String[] {"1","2","3","4","5","6","7","8","9","0"}; 
+		 StringBuffer shortBuffer = new StringBuffer(); 
+		 shortBuffer.append(type);
+		    String uuid = UUID.randomUUID().toString().replace("-", "");  
+		    for (int i = 0; i < 8; i++) {  
+		        String str = uuid.substring(i * 4, i * 4 + 4);  
+		        int x = Integer.parseInt(str, 16);  
+		        shortBuffer.append(chars[(x % 0x3E)/9]);  
+		    }  
+		    return shortBuffer.toString(); 
+		
 	}
 	/**
 	 * 

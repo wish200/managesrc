@@ -1,12 +1,12 @@
 package com.huiting.manage.action.app;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
 import com.huiting.manage.action.common.BaseAction;
 import com.huiting.manage.dto.base.AppAudioBaseDto;
-import com.huiting.manage.dto.base.AppPicbookBaseDto;
 import com.huiting.manage.dto.common.CcUserDto;
 import com.huiting.manage.dto.common.SearchDto;
 import com.huiting.manage.services.app.AppAudioService;
@@ -65,13 +65,33 @@ public class AppAudioAction extends BaseAction{
 	 */
 	public String add(){
 		if(appAudioBaseDto!=null){
-			String systemCode=appAudioService.getMaxAudioCode();//最大Eventno
-			String newAudio=appAudioService.getNewAudioCode(systemCode);//获得新的Eventno
-			appAudioBaseDto.setAudioid(newAudio);
+			String audioid = "";
+			SearchDto searchDto1 = new SearchDto();
+			AppAudioBaseDto appAudioBaseTempDto =null;
+			while("".equals(audioid)||appAudioBaseTempDto!=null){
+				audioid = genAudioID("A");
+				searchDto1.setAudioid(audioid);
+				appAudioBaseTempDto = appAudioService.getOneAudio(searchDto1);
+			}
+			
+			appAudioBaseDto.setAudioid(audioid);
 			appAudioService.add(appAudioBaseDto);
-			renderText(newAudio);
+			renderText(audioid);
 		}
 		return null;
+	}
+	public String genAudioID(String type){
+		 String[] chars = new String[] {"1","2","3","4","5","6","7","8","9","0"}; 
+		 StringBuffer shortBuffer = new StringBuffer(); 
+		 shortBuffer.append(type);
+		    String uuid = UUID.randomUUID().toString().replace("-", "");  
+		    for (int i = 0; i < 8; i++) {  
+		        String str = uuid.substring(i * 4, i * 4 + 4);  
+		        int x = Integer.parseInt(str, 16);  
+		        shortBuffer.append(chars[(x % 0x3E)/9]);  
+		    }  
+		    return shortBuffer.toString(); 
+		
 	}
 	/**
 	 * 

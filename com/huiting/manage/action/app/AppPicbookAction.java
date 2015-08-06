@@ -1,12 +1,11 @@
 package com.huiting.manage.action.app;
 
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
 import com.huiting.manage.action.common.BaseAction;
-import com.huiting.manage.dto.base.AppFlowerBaseDto;
 import com.huiting.manage.dto.base.AppPicbookBaseDto;
 import com.huiting.manage.dto.common.CcUserDto;
 import com.huiting.manage.dto.common.SearchDto;
@@ -64,13 +63,33 @@ public class AppPicbookAction extends BaseAction{
 	 */
 	public String add(){
 		if(appPicbookBaseDto!=null){
-			String systemCode=appPicbookService.getMaxPicbookCode();//最大Eventno
-			String newPicbook=appPicbookService.getNewPicbookCode(systemCode);//获得新的Eventno
-			appPicbookBaseDto.setPicbookid(newPicbook);
+			String picbookid = "";
+			SearchDto searchDto1 = new SearchDto();
+			AppPicbookBaseDto appPicbookBaseTempDto =null;
+			while("".equals(picbookid)||appPicbookBaseTempDto!=null){
+				picbookid = genPicbookID("P");
+				searchDto1.setPicbookid(picbookid);
+				appPicbookBaseTempDto = appPicbookService.getOnePicbook(searchDto1);
+			}
+			
+			appPicbookBaseDto.setPicbookid(picbookid);
 			appPicbookService.add(appPicbookBaseDto);
-			renderText(newPicbook);
+			renderText(picbookid);
 		}
 		return null;
+	}
+	public String genPicbookID(String type){
+		 String[] chars = new String[] {"1","2","3","4","5","6","7","8","9","0"}; 
+		 StringBuffer shortBuffer = new StringBuffer(); 
+		 shortBuffer.append(type);
+		    String uuid = UUID.randomUUID().toString().replace("-", "");  
+		    for (int i = 0; i < 8; i++) {  
+		        String str = uuid.substring(i * 4, i * 4 + 4);  
+		        int x = Integer.parseInt(str, 16);  
+		        shortBuffer.append(chars[(x % 0x3E)/9]);  
+		    }  
+		    return shortBuffer.toString(); 
+		
 	}
 	/**
 	 * 

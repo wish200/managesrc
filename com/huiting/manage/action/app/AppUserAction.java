@@ -2,10 +2,12 @@ package com.huiting.manage.action.app;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
 import com.huiting.manage.action.common.BaseAction;
+import com.huiting.manage.dto.base.AppPicbookBaseDto;
 import com.huiting.manage.dto.base.AppUserBaseDto;
 import com.huiting.manage.dto.common.CcUserDto;
 import com.huiting.manage.dto.common.SearchDto;
@@ -63,13 +65,33 @@ public class AppUserAction extends BaseAction{
 	 */
 	public String add(){
 		if(appUserBaseDto!=null){
-			//String systemCode=appUserService.getMaxUserCode();//最大Eventno
-			//String newUser=appUserService.getNewUserCode(systemCode);//获得新的Eventno
-			//appUserBaseDto.setUserid(newUser);
+			String userid = "";
+			SearchDto searchDto1 = new SearchDto();
+			AppUserBaseDto appUserBaseTempDto =null;
+			while("".equals(userid)||appUserBaseTempDto!=null){
+				userid = genUserID();
+				searchDto1.setPicbookid(userid);
+				appUserBaseTempDto = appUserService.getOneUser(searchDto1);
+			}
+			
+			appUserBaseDto.setUserid(userid);
 			appUserService.add(appUserBaseDto);
 			renderText(appUserBaseDto.getUserid());
 		}
 		return null;
+	}
+	
+	public String genUserID(){
+		 String[] chars = new String[] {"1","2","3","4","5","6","7","8","9","0"}; 
+		 StringBuffer shortBuffer = new StringBuffer();  
+		    String uuid = UUID.randomUUID().toString().replace("-", "");  
+		    for (int i = 0; i < 8; i++) {  
+		        String str = uuid.substring(i * 4, i * 4 + 4);  
+		        int x = Integer.parseInt(str, 16);  
+		        shortBuffer.append(chars[(x % 0x3E)/9]);  
+		    }  
+		    return shortBuffer.toString(); 
+		
 	}
 	/**
 	 * 

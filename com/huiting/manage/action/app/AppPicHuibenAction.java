@@ -1,12 +1,11 @@
 package com.huiting.manage.action.app;
 
-import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Resource;
 
 import com.huiting.manage.action.common.BaseAction;
-import com.huiting.manage.dto.base.AppHuibenBaseDto;
 import com.huiting.manage.dto.base.AppPicHuibenBaseDto;
 import com.huiting.manage.dto.common.CcUserDto;
 import com.huiting.manage.dto.common.SearchDto;
@@ -67,13 +66,34 @@ public class AppPicHuibenAction extends BaseAction{
 	 */
 	public String add(){
 		if(appPicHuibenBaseDto!=null){
-			String PicHuibenid=appPicHuibenService.getMaxPicHuibenCode();//最大Eventno
-			String newPicHuiben=appPicHuibenService.getNewPicHuibenCode(PicHuibenid);//获得新的Eventno
-			appPicHuibenBaseDto.setHuibenid(newPicHuiben);
+			String huibenid = "";
+			SearchDto searchDto1 = new SearchDto();
+			AppPicHuibenBaseDto appPicHuibenBaseTempDto =null;
+			while("".equals(huibenid)||appPicHuibenBaseTempDto!=null){
+				huibenid = genHuibenID("PH");
+				searchDto1.setHuibenid(huibenid);
+				appPicHuibenBaseTempDto = appPicHuibenService.getOnePicHuiben(searchDto1);
+			}
+
+			
+			appPicHuibenBaseDto.setHuibenid(huibenid);
 			appPicHuibenService.add(appPicHuibenBaseDto);
-			renderText(newPicHuiben);
+			renderText(huibenid);
 		}
 		return null;
+	}
+	public String genHuibenID(String type){
+		 String[] chars = new String[] {"1","2","3","4","5","6","7","8","9","0"}; 
+		 StringBuffer shortBuffer = new StringBuffer(); 
+		 shortBuffer.append(type);
+		    String uuid = UUID.randomUUID().toString().replace("-", "");  
+		    for (int i = 0; i < 8; i++) {  
+		        String str = uuid.substring(i * 4, i * 4 + 4);  
+		        int x = Integer.parseInt(str, 16);  
+		        shortBuffer.append(chars[(x % 0x3E)/9]);  
+		    }  
+		    return shortBuffer.toString(); 
+		
 	}
 	/**
 	 * 
